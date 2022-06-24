@@ -13,7 +13,9 @@ Install the `shiny` package before attempting to render this document.
 
 # Creating a simple UI
 
-See help page for [`shiny::selectInput()`](https://www.rdocumentation.org/packages/shiny.semantic/versions/0.4.3/topics/selectInput). The most usful input options at this stage are:
+See the [widget gallery](https://shiny.rstudio.com/gallery/widget-gallery.html) for details.
+
+See help page for [`shiny::selectInput()`](https://www.rdocumentation.org/packages/shiny.semantic/versions/0.4.3/topics/selectInput). The most useful input options at this stage are:
 
 - checkboxGroupInput()
 - checkboxInput()
@@ -40,27 +42,29 @@ To use the input UI, make an `inputPanel({})`, and use the values in a `render*(
 ```
 
 inputPanel({
-  # input function here...
+# input function here...
 })
 
 renderPlot({
-  # output plot here ...
+# output plot here ...
 })
 
 ```
 
-The first argument of an input UI is the name of that input in the list called `input`, e.g. `shape`. Access it by name in the `render*()` function, e.g. `input$shape`.
+The first argument of an input UI is the name of that input in the list called `input`, e.g. `shape`. Access it by name in the `render*()` function, e.g. `input$shapeRick`.
 
 ```{r echo = FALSE}
 
 inputPanel({
-  radioButtons("shape", label = "Circle:",
-               c(16, 1))
+  radioButtons("shapeRick",
+               label = "Circle:",
+               choices = c("Filled circles" = 16, 
+                           "Hollow circles" = 1))
 })
 
 renderPlot({
   ggplot(mtcars, aes(mpg, wt)) +
-    geom_point(shape = as.numeric(input$shape), 
+    geom_point(shape = as.numeric(input$shapeRick), 
                alpha = 0.75, size = 10)
 })
 

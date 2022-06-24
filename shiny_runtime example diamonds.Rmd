@@ -1,0 +1,33 @@
+---
+title: "R Markdown w/ a Shiny runtime"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+Allow the user (i.e. us) to color points according to `cut`, `color`, or `clarity`.
+
+```{r echo = FALSE}
+
+inputPanel({
+  selectInput("colorRick",
+              label = "Color points according to:", 
+              choices = c("cut", "color", "clarity"))
+})
+
+inputPanel({
+  sliderInput("size",
+              label = "Size of points:", min = 1, max = 10, value = 2)
+})
+
+renderPlot({
+  ggplot(diamonds, aes_string("carat", "price", color = input$colorRick)) +
+    geom_point(alpha = 0.5, size = as.numeric(input$size))
+})
+
+```
+

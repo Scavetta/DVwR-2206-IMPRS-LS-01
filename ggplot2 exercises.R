@@ -99,11 +99,73 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 ## 4 - Categorical x (or y)
 
 # Solutions
-## 
+## 1 - alpha (e.g transparency: complete transparent = 0, opaque = 1)
+## 2a - shape (e.g. hollow circles)
+## 2b - size (e.g. smaller)
+## 3 - position (e.g. jittering - random normal noise, dodging - systematic shift)
+## 4 - Use a different geom or plot type
+## 5 - Facets
+
+# example solutions to over-plotting
+# both of these are inadequate
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(alpha = 0.5, shape = 16)
+
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(shape = 1)
+
+# Add jittering (be honest when reporting)
+# super basic
+p <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(alpha = 0.5, shape = 16, position = "jitter")
+# The randomness is differnt everytime:
+p
+
+p +
+  geom_smooth(se = FALSE)
+
+# bit more flexible - use the geom_jittter
+# specify width, height
+ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_jitter(alpha = 0.5, shape = 16)
+
+# Roll Royce - full options w a position_*() function
+# seed = random seed generator
+posn_j <- position_jitter(seed = 136)
+
+p <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(alpha = 0.5, shape = 16, position = posn_j)
+
+# The same randomness evertime
+p
+
+p +
+  geom_smooth(se = FALSE)
+
+# Over-plotting w High-density data: example
+diamonds
+# how does the price depend on changes in carat (hypo pos correlation)
+# how about for each cut (i.e. colour points according to the cut variable):
+ggplot(diamonds, aes(carat, price, color = cut)) +
+  geom_point()
+
+diamonds$cut
+
+diamonds %>% 
+  arrange(desc(cut)) %>% 
+  ggplot(aes(log(carat), log(price), color = cut)) +
+  # geom_point(alpha = 0.5, shape = ".") +
+  geom_smooth(method = "lm") +
+  # facet_grid(. ~ cut) +
+  NULL
 
 
 
-
+# faceting makes each group clearer, but makes it more difficult
+# to do intergroup comparisons
+ggplot(diamonds, aes(carat, price)) +
+  geom_point() + 
+  facet_grid(. ~ cut)
 
 
 
