@@ -1,0 +1,69 @@
+---
+title: "R Markdown w/ a Shiny runtime"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+Install the `shiny` package before attempting to render this document.
+
+# Creating a simple UI
+
+See help page for [`shiny::selectInput()`](https://www.rdocumentation.org/packages/shiny.semantic/versions/0.4.3/topics/selectInput). The most usful input options at this stage are:
+
+- checkboxGroupInput()
+- checkboxInput()
+- numericInput()
+- radioButtons()
+- sliderInput()
+
+Other input options, useful in other situations, include:
+
+- actionButton()
+- dateInput()
+- dateRangeInput()
+- fileInput()
+- passwordInput()
+- submitButton()
+- textAreaInput()
+- textInput()
+- varSelectInput()
+
+## Use
+
+To use the input UI, make an `inputPanel({})`, and use the values in a `render*({})` function. Here, `renderPlot({})`, but there are other oututs you can use.
+
+```
+
+inputPanel({
+  # input function here...
+})
+
+renderPlot({
+  # output plot here ...
+})
+
+```
+
+The first argument of an input UI is the name of that input in the list called `input`, e.g. `shape`. Access it by name in the `render*()` function, e.g. `input$shape`.
+
+```{r echo = FALSE}
+
+inputPanel({
+  radioButtons("shape", label = "Circle:",
+               c(16, 1))
+})
+
+renderPlot({
+  ggplot(mtcars, aes(mpg, wt)) +
+    geom_point(shape = as.numeric(input$shape), 
+               alpha = 0.75, size = 10)
+})
+
+```
+
+Above, we convert the `chr` to a `numeric` value for input in the plot. 
